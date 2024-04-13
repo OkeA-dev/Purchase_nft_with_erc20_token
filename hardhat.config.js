@@ -1,5 +1,14 @@
 require("@nomicfoundation/hardhat-toolbox");
-require("donenv").config();
+require("dotenv").config();
+
+task("deploy-erc20", "Deploy the ERC20 token contract")
+  .setAction(async (_, { ethers }) => {
+    const ERC20Module = await ethers.getContractFactory("MyToken");
+    const erc20Token = await ERC20Module.deploy();
+    await erc20Token.deployed();
+
+    console.log("ERC20 token deployed to:", erc20Token.address);
+  });
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
