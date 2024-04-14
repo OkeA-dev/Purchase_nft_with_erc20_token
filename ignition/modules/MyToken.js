@@ -9,5 +9,3 @@ module.exports = buildModule("ERC20Module", (m) => {
 
   return { token };
 });
-
-
