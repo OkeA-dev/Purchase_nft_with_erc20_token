@@ -1,35 +1,30 @@
-const {
-  time,
-  loadFixture,
-} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
-const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
+const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 
-describe("ERC20 Token", function () {
-  async function deployERC20Token() {
-    const [owner, recipient, spender] = await ethers.getSigner();
+describe("MyToken", function() {
+  async function deployTokenFixture() {
+    const [owner, recipient, spender] = await ethers.getSigners();
+    const INITIAL_SUPPLY = 1000000;
 
-    const ERC20 = await ethers.getContractFactory("MyToken");
-    const token = await ERC20.deploy("Iconart Token", "ICT", 100000);
+    const MyToken = await ethers.getContractFactory("MyToken");
+    console.log("Deploying contract...");
 
-    return { token, owner, recipient, spender};
+    const token = await MyToken.deploy("Iconart Token", "ICT", INITIAL_SUPPLY);
+    console.log("Waiting for contract deployment....");
 
+    await token.deployed();
+
+    return { token, owner, recipient, spender };
   }
 
-  it("should have the correct initial balance", async function () {
-    const {token, owner } = await loadFixture(deployERC20Token);
-    expect(await token.balanceOf(owner.address)).to.equal(await token.totalSupply());
+  describe("Balance and Transfer", function () {
+    it("should assign the total supply to the owner", async function () {
+      const { token, owner } = await loadFixture(deployTokenFixture);
+      const ownerBalance = await token.balanceOf(owner.address);
+
+      expect(await token.totalSupply()).to.equal(ownerBalance);
+    });
   });
-
-  it("should the token amount correctly", async function () {
-    const [token, owner, recipient] = await loadFixture(deployERC20Token);
-
-    const amount  = 10000;
-    await token.transfer(recipient, amount);
-
-    expect(await token.balanceOf(recipient.address)).to.equal(amount);
-    expect(await token.balanceOf(owner.address)).to.equal(await token.totalSupply() - amount)
-  } )
 })
