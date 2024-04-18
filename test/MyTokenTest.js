@@ -5,7 +5,7 @@ const { ethers } = require("hardhat");
 
 describe("MyToken", function() {
   async function deployTokenFixture() {
-    const [owner, recipient, spender] = await ethers.getSigners();
+    const [owner, recipient, spender, attacker] = await ethers.getSigners();
     const INITIAL_SUPPLY = 1000000;
 
     const MyToken = await ethers.getContractFactory("MyToken");
@@ -16,7 +16,7 @@ describe("MyToken", function() {
 
     await token.waitForDeployment();
 
-    return { token, owner, recipient, spender };
+    return { token, owner, recipient, spender , attacker};
   }
 
   describe("Balance and Transfer", function () {
@@ -27,4 +27,5 @@ describe("MyToken", function() {
       expect(await token.totalSupply()).to.equal(ownerBalance);
     });
   });
-})
+ 
+});
