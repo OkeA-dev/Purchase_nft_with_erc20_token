@@ -4,7 +4,7 @@ require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  defaultNetwork: "sepolia",
+  defaultNetwork: "hardhat",
   networks: {
     hardhat: {
     },

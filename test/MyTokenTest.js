@@ -14,7 +14,7 @@ describe("MyToken", function() {
     const token = await MyToken.deploy("Iconart Token", "ICT", INITIAL_SUPPLY);
     console.log("Waiting for contract deployment....");
 
-    await token.deployed();
+    await token.waitForDeployment();
 
     return { token, owner, recipient, spender };
   }
