@@ -11,13 +11,15 @@ contract MyToken is ERC20 {
         locked = true;
         _;
         locked = false;
-    }
+    } 
 
     constructor(string memory name, string memory symbol, uint256 initialSupply) ERC20(name, symbol) {
         _mint(msg.sender, initialSupply);
     }
 
     function transfer(address recipient, uint256 amount) public virtual override noReentrancy returns (bool) {
+        require(balanceOf(msg.sender) >= amount, "ERC20: transfer amount exceeds balance");
+
         return super.transfer(recipient, amount);
     }
 

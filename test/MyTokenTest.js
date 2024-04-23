@@ -19,7 +19,7 @@ describe("MyToken", function() {
     return { token, owner, recipient, spender , attacker};
   }
 
-  describe("Balance and Transfer", function () {
+  describe("Balance ", function () {
     it("should assign the total supply to the owner", async function () {
       const { token, owner } = await loadFixture(deployTokenFixture);
       const ownerBalance = await token.balanceOf(owner.address);
@@ -27,5 +27,19 @@ describe("MyToken", function() {
       expect(await token.totalSupply()).to.equal(ownerBalance);
     });
   });
+
+  describe("Transfer", function () {
+    it("should transfer to between account", async function () {
+      const { token, owner, recipient} = await loadFixture(deployTokenFixture);
+      await token.transfer(recipient.address, 100);
+
+      expect(await token.balanceOf(recipient.address)).to.equal(100);
+    });
+
+    it("should fail if the sender doesn't have enough tokens", async function () {
+      const { token, owner, recipient} = await loadFixture(deployTokenFixture);
+      await expect(token.connect(recipient).transfer(owner.address, 1)).to.be.revertedWith("ERC20: transfer amount exceeds balance");
+    })
+  })
  
 });
