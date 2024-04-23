@@ -39,7 +39,7 @@ describe("MyToken", function() {
     it("should fail if the sender doesn't have enough tokens", async function () {
       const { token, owner, recipient} = await loadFixture(deployTokenFixture);
       await expect(token.connect(recipient).transfer(owner.address, 1)).to.be.revertedWith("ERC20: transfer amount exceeds balance");
-    })
+    });
   })
  
 });
